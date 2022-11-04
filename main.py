@@ -12,11 +12,13 @@ import scripts.machines as machines
 from options import Options
 
 def main(args):
-    
-    if 'HFlickr' or 'HCOCO' or 'Hday2night' or 'HAdobe5k' in args.base_dir:
-        dataset_func = datasets.BIH
-    else:
-        dataset_func = datasets.COCO
+    print("base_dir:" + args.base_dir)
+    #if 'HFlickr' or 'HCOCO' or 'Hday2night' or 'HAdobe5k' in args.base_dir:
+    #    print("BIH......................") 
+    #    dataset_func = datasets.BIH
+    #else:
+    #    print("COCO.....................")
+    dataset_func = datasets.COCO
 
     train_loader = torch.utils.data.DataLoader(dataset_func('train',args),batch_size=args.train_batch, shuffle=True,
         num_workers=args.workers, pin_memory=True)
@@ -34,13 +36,17 @@ def main(args):
 
         print('\nEpoch: %d | LR: %.8f' % (epoch + 1, lr))
         lr = adjust_learning_rate(data_loaders, Machine.optimizer, epoch, lr, args)
-
+        print("record")
         Machine.record('lr',lr, epoch)        
+        print("train")
         Machine.train(epoch)
 
         if args.freq < 0:
+            print("validate")
             Machine.validate(epoch)
+            print("flush")
             Machine.flush()
+            print("save")
             Machine.save_checkpoint()
 
 if __name__ == '__main__':

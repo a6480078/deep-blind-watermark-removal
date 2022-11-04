@@ -1,0 +1,12 @@
+__pycache__/
+10kgray/
+output.log
+natural.zip
+*/__pycache__/
+*/*/__pycache__/
+*/*/*/__pycache__/
+*/*/*/*/__pycache__/
+*/*/*/*/*/__pycache__/
+val.zip
+val_images/
+scipy/

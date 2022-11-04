@@ -76,10 +76,16 @@ class Losses(nn.Module):
         if self.args.style_loss > 0:
             vgg_loss = sum([self.vggloss(im,target,mask) for im in recov_imgs])
 
+        att_loss =  self.attLoss(pred_ms, mask)
+        #print(pixel_loss,att_loss,wm_loss,vgg_loss)
         if self.args.ssim_loss > 0:
+            #print(self.ssimloss)
+            #print([ im.device for im in recov_imgs])
+            #print(target.device)
+            #print([ 1 - self.ssimloss(target,im) for im in recov_imgs])
             ssim_loss = sum([ 1 - self.ssimloss(im,target) for im in recov_imgs])
 
-        att_loss =  self.attLoss(pred_ms, mask)
+        #att_loss =  self.attLoss(pred_ms, mask)
 
         return pixel_loss,att_loss,wm_loss,vgg_loss,ssim_loss
 
@@ -109,21 +115,23 @@ class VX(BasicMachine):
 
         end = time.time()
         bar = Bar('Processing {} '.format(self.args.arch), max=len(self.train_loader))
-
+        print(self.train_loader)
         for i, batches in enumerate(self.train_loader):
-
+            
             current_index = len(self.train_loader) * epoch + i
-
+            #print(batches)
             inputs = batches['image'].to(self.device)
             target = batches['target'].to(self.device)
             mask = batches['mask'].to(self.device)
             wm =  batches['wm'].to(self.device)
+            #wm =  batches['name']
 
             outputs = self.model(self.norm(inputs))
             
             self.model.zero_grad_all()
 
             l2_loss,att_loss,wm_loss,style_loss,ssim_loss = self.loss(outputs[0],self.norm(target),outputs[1],mask,outputs[2],self.norm(wm))
+            #l2_loss,att_loss,wm_loss,style_loss,ssim_loss = self.loss(outputs[0],self.norm(target),outputs[1],mask,outputs[2])
             total_loss = 2*l2_loss + self.args.att_loss * att_loss + wm_loss + self.args.style_loss * style_loss + self.args.ssim_loss * ssim_loss
 
             # compute gradient and do SGD step
@@ -215,6 +223,8 @@ class VX(BasicMachine):
                     torchvision.utils.save_image(ims,os.path.join(self.args.checkpoint,'%s_%s.jpg'%(i,epoch)))
 
                 # here two choice: mseLoss or NLLLoss
+                #print(imfinal.device)
+                #print(target.device)
                 psnr = 10 * log10(1 / F.mse_loss(imfinal,target).item())       
 
                 ssim = pytorch_ssim.ssim(imfinal,target)

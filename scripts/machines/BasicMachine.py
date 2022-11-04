@@ -1,4 +1,5 @@
 import torch
+from tqdm import tqdm
 import torch.nn as nn
 import torch.backends.cudnn as cudnn
 from progress.bar import Bar
@@ -38,7 +39,7 @@ class BasicMachine(object):
         
         self.title = '_'+args.machine + '_' + args.data + '_' + args.arch
         self.args.checkpoint = args.checkpoint + self.title
-        self.device = torch.device('cuda')
+        self.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
          # create checkpoint dir
         if not isdir(self.args.checkpoint):
             mkdir_p(self.args.checkpoint)
@@ -89,14 +90,18 @@ class BasicMachine(object):
         self.model.train()
         end = time.time()
 
-        bar = Bar('Processing', max=len(self.train_loader)*self.hl)
+        #bar = Bar('Processing', max=len(self.train_loader)*self.hl)
+        train_bar = tqdm(self.train_loader)
         for _ in range(self.hl):
-            for i, batches in enumerate(self.train_loader):
+            #for i, batches in enumerate(self.train_loader):
+            for i, batches in enumerate(train_bar):
                 # measure data loading time
                 inputs = batches['image']
                 target = batches['target'].to(self.device)
                 mask =batches['mask'].to(self.device)
                 current_index = len(self.train_loader) * epoch + i
+                print(i)
+                print("current_index"+current_index)
 
                 if self.args.hl:
                     feeded = torch.cat([inputs,mask],dim=1)
@@ -141,8 +146,13 @@ class BasicMachine(object):
                             loss_vgg=lossvgg.avg
                             )
 
-                if current_index % 1000 == 0:
-                    print(suffix)
+                #if current_index % 1000 == 0:
+                #if current_index:
+                train_bar.desc = "train epoch[{}/{}] loss:{:.3f}".format(_ + 1,
+                                                                      self.hl,
+                                                                      total_loss)
+                print(suffix)
+
                 
                 if self.args.freq > 0 and current_index % self.args.freq == 0:
                     self.validate(current_index)

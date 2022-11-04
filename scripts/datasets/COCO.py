@@ -63,6 +63,11 @@ class COCO(data.Dataset):
             self.mask.append(os.path.join(mypath,'mask',file_name))
             self.wm.append(os.path.join(mypath,'wm',file_name))
             self.anno.append(os.path.join(self.base_folder,'natural',file_name.split('-')[0]+'.jpg'))
+            #self.train.append(os.path.join(mypath,'image',file_name.split(".")[0] + '.png'))
+            #self.mask.append(os.path.join(mypath,'mask',file_name.split(".")[0] + '.png'))
+            #self.anno.append(os.path.join(mypath,'natural',file_name.split(".")[0] + '.png'))
+            #self.wm.append(os.path.join(mypath,'wm',file_name.split(".")[0] + '.png'))
+
 
         if len(self.sample) > 0 :
             self.train = [ self.train[i] for i in self.sample ] 
@@ -74,7 +79,8 @@ class COCO(data.Dataset):
                 transforms.ToTensor()
             ])
 
-        print('total Dataset of '+self.dataset+' is : ', len(self.train))
+        print('COCO total Dataset of '+self.dataset+' is : ', len(self.train))
+        print(self.train[:3])
 
 
     def __getitem__(self, index):

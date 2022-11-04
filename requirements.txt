@@ -8,3 +8,11 @@ sklearn==0.0
 tensorboardX
 torch>=1.0.0
 torchvision
+Cython==0.29.32
+seaborn==0.12.1
+#apt-get install gcc libpq-dev -y
+#apt-get install gfortran libopenblas-dev liblapack-dev
+numpydoc==1.5.0
+scikit-image==0.14.5
+progress==1.6
+pytorch_ssim==0.1
