@@ -59,10 +59,13 @@ class COCO(data.Dataset):
             file_names = file_names
 
         for file_name in file_names:
+            #self.train.append(os.path.join(mypath,'image',file_name))
+            #self.mask.append(os.path.join(mypath,'mask',file_name))
+            #self.wm.append(os.path.join(mypath,'wm',file_name))
+            #self.anno.append(os.path.join(self.base_folder,'natural',file_name.split('-')[0]+'.jpg'))
             self.train.append(os.path.join(mypath,'image',file_name))
-            self.mask.append(os.path.join(mypath,'mask',file_name))
-            self.wm.append(os.path.join(mypath,'wm',file_name))
-            self.anno.append(os.path.join(self.base_folder,'natural',file_name.split('-')[0]+'.jpg'))
+            self.mask.append(os.path.join(mypath,'mask',file_name.split('.')[0]+'.png'))
+            self.anno.append(os.path.join(self.base_folder,'natural',file_name))
         if len(self.sample) > 0:
             self.train = [ self.train[i] for i in self.sample ] 
             self.mask = [ self.mask[i] for i in self.sample ] 
@@ -81,17 +84,17 @@ class COCO(data.Dataset):
         img = Image.open(self.train[index]).convert('RGB')
         mask = Image.open(self.mask[index]).convert('L')
         anno = Image.open(self.anno[index]).convert('RGB')
-        wm = Image.open(self.wm[index]).convert('RGB')
+       # wm = Image.open(self.wm[index]).convert('RGB')
 
         return {"image": self.trans(img),
                 "target": self.trans(anno), 
                 "mask": self.trans(mask), 
-                "wm": self.trans(wm),
+        #        "wm": self.trans(wm),
                 "name": self.train[index].split('/')[-1],
                 "imgurl":self.train[index],
                 "maskurl":self.mask[index],
                 "targeturl":self.anno[index],
-                "wmurl":self.wm[index]
+        #        "wmurl":self.wm[index]
                 }
 
     def __len__(self):

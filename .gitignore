@@ -10,3 +10,7 @@ natural.zip
 val.zip
 val_images/
 scipy/
+examples/clwdtest/
+examples/test/
+*.log
+img_CLWD/
