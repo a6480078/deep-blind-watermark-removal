@@ -77,6 +77,7 @@ class BasicMachine(object):
 
 
         if self.args.resume != '':
+            print("resume")
             self.resume(self.args.resume)
 
 

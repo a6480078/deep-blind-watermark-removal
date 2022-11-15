@@ -75,7 +75,10 @@ class Losses(nn.Module):
 
         if self.args.style_loss > 0:
             vgg_loss = sum([self.vggloss(im,target,mask) for im in recov_imgs])
-
+#        print("pred_ms:")
+#        print(pred_ms)
+#        print(" mask:")
+#        print(mask)
         att_loss =  self.attLoss(pred_ms, mask)
         #print(pixel_loss,att_loss,wm_loss,vgg_loss)
         if self.args.ssim_loss > 0:
@@ -125,6 +128,14 @@ class VX(BasicMachine):
             mask = batches['mask'].to(self.device)
             wm =  batches['wm'].to(self.device)
             #wm =  batches['name']
+            print("imgurl:")
+            print(batches['imgurl'])
+            print("targeturl:")
+            print(batches['targeturl'])
+            print("maskurl:")
+            print(batches['maskurl'])
+            print("wmurl:")
+            print(batches['wmurl'])
 
             outputs = self.model(self.norm(inputs))
             
@@ -169,8 +180,10 @@ class VX(BasicMachine):
                         loss_ssim=lossssim.avg,
                         loss_mx=lossMX.avg
                         )
-            if current_index % 1000 == 0:
-                print(suffix)
+            #if current_index % 1000 == 0:
+            print("current_index:" )
+            print(current_index)
+            print(suffix)
 
             if self.args.freq > 0 and current_index % self.args.freq == 0:
                 self.validate(current_index)

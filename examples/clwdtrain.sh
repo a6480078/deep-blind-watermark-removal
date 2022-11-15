@@ -24,7 +24,7 @@ CUDA_VISIBLE_DEVICES=0 python ../main.py  --epochs 100\
  --input-size 256\
  --train-batch 4\
  --test-batch 1\
- --base-dir /root/bru/splitnet/watermark/10kgray/10kgray\
+ --base-dir /root/bru/splitnet/watermark/img_CLWD/CLWD/train \
  --data _images 
 # --resume ~/bru/splitnet/watermark/examples/eval/10kgray/1e3_bs4_256_hybrid_ssim_vgg_vx__images_vvv4n/checkpoint.pth.tar 
 

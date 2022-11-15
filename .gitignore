@@ -14,3 +14,5 @@ examples/clwdtest/
 examples/test/
 *.log
 img_CLWD/
+clwd.log*
+CLWD.rar

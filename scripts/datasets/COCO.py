@@ -59,10 +59,14 @@ class COCO(data.Dataset):
             file_names = file_names
 
         for file_name in file_names:
-            self.train.append(os.path.join(mypath,'image',file_name))
-            self.mask.append(os.path.join(mypath,'mask',file_name))
-            self.wm.append(os.path.join(mypath,'wm',file_name))
-            self.anno.append(os.path.join(self.base_folder,'natural',file_name.split('-')[0]+'.jpg'))
+            #self.train.append(os.path.join(mypath,'image',file_name))
+            #self.mask.append(os.path.join(mypath,'mask',file_name))
+            #self.wm.append(os.path.join(mypath,'wm',file_name))
+            self.train.append(os.path.join(mypath,'image',file_name.split('.')[0]+'.jpg'))
+            self.mask.append(os.path.join(mypath,'mask',file_name.split('.')[0]+'.png'))
+            self.wm.append(os.path.join(mypath,'wm',file_name.split('.')[0]+'.png'))
+            self.anno.append(os.path.join(self.base_folder,'natural',file_name.split('.')[0]+'.jpg'))
+            #self.anno.append(os.path.join(self.base_folder,'natural',file_name.split('-')[0]+'.jpg'))
         if len(self.sample) > 0:
             self.train = [ self.train[i] for i in self.sample ] 
             self.mask = [ self.mask[i] for i in self.sample ] 
